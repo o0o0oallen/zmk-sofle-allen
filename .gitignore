@@ -1,0 +1,9 @@
+# Local firmware backups and generated artifacts
+backup/
+*.uf2
+*.hex
+*.bin
+*.zip
+
+# Temporary build/debug logs
+*.log
