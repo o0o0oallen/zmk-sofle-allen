@@ -13,14 +13,14 @@
 #
 ---
 include:
-  - board: nice_nano_v2
+  - board: nice_nano_v2//zmk
     shield: sofle_left nice_oled
     artifact-name: nice_nano_sofle_left_oled
 
-  - board: nice_nano_v2
+  - board: nice_nano_v2//zmk
     shield: sofle_right nice_oled
     artifact-name: nice_nano_sofle_right_oled
 
-  - board: nice_nano_v2
+  - board: nice_nano_v2//zmk
     shield: settings_reset
     artifact-name: nice_nano_settings_reset
