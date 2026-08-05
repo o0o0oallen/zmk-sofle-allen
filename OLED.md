@@ -116,6 +116,25 @@ CONFIG_NICE_OLED_WIDGET_CENTRAL_SHOW_BATTERY_PERIPHERAL_ONLY=n
 CONFIG_NICE_OLED_WIDGET_CENTRAL_SHOW_BATTERY_PERIPHERAL_AND_CENTRAL=n
 ```
 
+## Split reconnect stability
+
+The current config keeps deep sleep enabled, but delays it to 1 hour to reduce cases where the right/peripheral half wakes from long sleep and does not reconnect to the left/central half.
+
+```conf
+CONFIG_ZMK_BLE_EXPERIMENTAL_CONN=y
+CONFIG_ZMK_SLEEP=y
+CONFIG_ZMK_IDLE_TIMEOUT=60000
+CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=3600000
+```
+
+If the peripheral still fails to reconnect after very long sleep, the more aggressive option is to disable deep sleep:
+
+```conf
+CONFIG_ZMK_SLEEP=n
+```
+
+That usually improves wake/reconnect behavior, but it can reduce battery life.
+
 ## Flashing order
 
 1. Flash `nice_nano_sofle_left_oled.uf2` to the left/central half.
