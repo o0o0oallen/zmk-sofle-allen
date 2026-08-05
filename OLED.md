@@ -76,7 +76,7 @@ CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_GEM=n
 CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_HEAD=n
 CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_POKEMON=n
 CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_SPACEMAN=n
-CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_SMART_BATTERY=y
+CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_SMART_BATTERY=n
 CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_MS=960
 ```
 
@@ -118,22 +118,26 @@ CONFIG_NICE_OLED_WIDGET_CENTRAL_SHOW_BATTERY_PERIPHERAL_AND_CENTRAL=n
 
 ## Split reconnect stability
 
-The current config keeps deep sleep enabled, but delays it to 1 hour to reduce cases where the right/peripheral half wakes from long sleep and does not reconnect to the left/central half.
+The current config disables deep sleep to avoid cases where the right/peripheral half wakes from long sleep and does not reconnect to the left/central half.
 
 ```conf
 CONFIG_ZMK_BLE_EXPERIMENTAL_CONN=y
-CONFIG_ZMK_SLEEP=y
+CONFIG_ZMK_SLEEP=n
 CONFIG_ZMK_IDLE_TIMEOUT=60000
-CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=3600000
+CONFIG_BT_CTLR_TX_PWR_PLUS_8=y
 ```
 
-If the peripheral still fails to reconnect after very long sleep, the more aggressive option is to disable deep sleep:
+This favors split reliability over maximum battery life: deep sleep is disabled, so the peripheral half stays able to reconnect after long idle periods, and BLE transmit power is raised for a stronger split link.
+
+If battery life matters more than reconnect reliability, revert to:
 
 ```conf
-CONFIG_ZMK_SLEEP=n
+CONFIG_ZMK_SLEEP=y
+CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=900000
+CONFIG_BT_CTLR_TX_PWR_PLUS_8=n
 ```
 
-That usually improves wake/reconnect behavior, but it can reduce battery life.
+That restores ZMK's normal 15 minute deep-sleep behavior.
 
 ## Flashing order
 
